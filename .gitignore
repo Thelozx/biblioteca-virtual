@@ -1,0 +1,10 @@
+# Node.js dependencies
+node_modules/
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+#Package
+package.json
+package-lock.json

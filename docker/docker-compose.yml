@@ -1,42 +1,35 @@
-version: '3'
-
-networks:
-  web_network:
-    driver: overlay
-
-volumes:
-  site_conf:
+version: "3.8" #Tudo aqui é exemplo
 
 services:
-  name: # Escolhe ai
-    build: name #Cada serviço deve estar em 1 containêr
-    container_name: name #Meio obvio
+  app: # Escolhe ai #Vai precisar de 3 desse, no min
+    image: node:8 #Cada serviço deve estar em 1 containêr
+    container_name: node_app
     ports: #requisição de portas
-      - "Nº:Nº"
-    restart: unless-stopped
-    networks: #Definir as redes a serem criadas
-      - app-network
-    volumes: #jaja eu mexo
-      - ./backend:/var/www/html
-
-  names:
-    build: name
-    container_name: name
-    ports:
-      - "nº"
-    volumes:
-      - ./frontend:/usr/share/nginx/html
+      - "3000:3000"
+    command: 
+      ["npm", "start"]  # Define o comando de inicialização
     networks:
-      - app-network
+      - app_net  # Conecta o container à rede personalizada
+    volumes: #jaja eu mexo, to aprendendo
+      - ./app:/usr/src/app
 
-  config:
-    build: name
-    container_name: name
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: myappdb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
     ports:
-      - "nº"
+      - "3306:3306"
     volumes:
-      - ./frontend:/usr/share/nginx/html
-    networks:
-      - app-network
-    
+      - mysql_data:/var/lib/mysql
 
+
+volumes:
+  mysql_data:
+
+networks:
+  app_net:
+    driver: bridge
