@@ -1,10 +1,10 @@
 version: "3.8" #Tudo aqui é exemplo
 
 services:
-  app: # Escolhe ai #Vai precisar de 3 desse, no min
-    image: node:8 #Cada serviço deve estar em 1 containêr
+  frontend: 
+    image: node:8 #Apache (Adaptar)
     container_name: node_app
-    ports: #requisição de portas
+    ports:
       - "3000:3000"
     command: 
       ["npm", "start"]  # Define o comando de inicialização
@@ -13,7 +13,19 @@ services:
     volumes: #jaja eu mexo, to aprendendo
       - ./app:/usr/src/app
 
-  db:
+  backend:
+    image: node:8 #Node.js (Adaptar)
+    container_name: node_app
+    ports:
+      - "3000:3000"
+    command: 
+      ["npm", "start"]
+    networks:
+      - app_net
+    volumes:
+      - ./app:/usr/src/app
+
+  db: #obrigatoriamente mysql
     image: mysql:8.0
     container_name: mysql_db
     environment:
