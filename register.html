@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Edukador</title>
+    <link href="//fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style-liberty-login.css">
+    <link rel="stylesheet" href="assets/css/style-liberty.css">
+    <!-- Inclua o jQuery antes de seus scripts JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<!--header-->
+<header id="site-header" class="fixed-top">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark stroke">
+            <h1>
+                <a class="navbar-brand" href="landing-single.html">
+                    <i class="fas fa-chalkboard-teacher"></i> Biblioteca Virtual</a>
+            </h1>
+            <button class="navbar-toggler  collapsed bg-gradient" type="button" data-toggle="collapse"
+                data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon fa icon-expand fa-bars"></span>
+                <span class="navbar-toggler-icon fa icon-close fa-times"></span>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav ml-lg-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="landing-single.html">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link scroll" href="landing-single.html">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link scroll" href="landing-single.html">Livros</a>
+                    </li>
+                    <li class="nav-item mr-lg-1">
+                        <a class="nav-link scroll" href="landing-single.html">Contato</a>
+                    </li>
+                    <!--/search-right-->
+                    <li class="header-search mr-lg-2 mt-lg-0 mt-4 position-relative">
+                        <div class="search-right">
+                            <a href="#search" class="btn btn-style search-btn" title="search"><span
+                                    class="fas fa-search mr-2" aria-hidden="true"></span> Buscar</a>
+                            <!-- search popup -->
+                            <div id="search" class="pop-overlay">
+                                <div class="popup">
+
+                                    <form action="error.html" method="GET" class="search-box">
+                                        <input type="search" placeholder="Digite o nome do livro" name="search"
+                                            required="required" autofocus="">
+                                        <button type="submit" class="btn"><span class="fas fa-search"
+                                                aria-hidden="true"></span></button>
+                                    </form>
+
+                                </div>
+                                <a class="close" href="#close">×</a>
+                            </div>
+                            <!-- /search popup -->
+                        </div>
+                    </li>
+                    <!--//search-right-->
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<section class="w3l-login">
+<div class="w3l-form-36-mian">
+    <div class="container">
+    <div class="form-inner-cont">
+        <h3>Registre-se</h3>
+        <h6>Para continuar conosco</h6>
+        <form  method="post" class="signin-form" onsubmit="return validarsenha(event)">
+            <div class="form-input">
+                <input type="text" id="user_name" name="user_name" placeholder="Nome do usuário" required autofocus>
+            </div>
+            <div class="form-input">
+                <input type="date" id="birth_date" name="birth_date" placeholder="Data de Nascimento" required>
+            </div>
+            <div class="form-input">
+                <input type="email" id="email" name="email" placeholder="Email" required>
+            </div>  
+            <div class="form-input">
+                <input type="password" id="password" name="password" placeholder="Senha" required>
+            </div>
+            <div class="form-input">
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirme a Senha" required>
+            </div>
+            <p id="error-message" style="color: red; display: none;">As senhas não coincidem!</p>
+            <button type="submit" class="btn btn-primary theme-button mt-4">Cadastre-se</button>
+        </form>
+        <p class="signup">Já possui uma conta? <a href="login.html" class="signuplink">Faça o Login.</a></p>
+    </div>
+    </div>
+</div>
+</section>
+
+
+</body>
+</html>

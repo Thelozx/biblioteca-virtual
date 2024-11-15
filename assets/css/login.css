@@ -1,0 +1,46 @@
+.check-remaind {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+	cursor: pointer;
+	position: relative;
+}
+
+.check-remaind input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.check-remaind .checkmark {
+	width: 18px;
+	height: 18px;
+	background-color: #eee;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	display: inline-block;
+	margin-right: 8px;
+	position: relative;
+}
+
+.check-remaind input[type="checkbox"]:checked + .checkmark {
+	background-color: #007bff;
+	border-color: #007bff;
+}
+
+.check-remaind input[type="checkbox"]:checked + .checkmark::after {
+	content: "";
+	position: absolute;
+	left: 4px;
+	top: 1px;
+	width: 6px;
+	height: 12px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+.check-remaind .remember {
+	color: #333;
+	font-size: 14px;
+}
