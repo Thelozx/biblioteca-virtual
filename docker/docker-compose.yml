@@ -1,0 +1,42 @@
+version: '3'
+
+networks:
+  web_network:
+    driver: overlay
+
+volumes:
+  site_conf:
+
+services:
+  name: # Escolhe ai
+    build: name #Cada serviço deve estar em 1 containêr
+    container_name: name #Meio obvio
+    ports: #requisição de portas
+      - "Nº:Nº"
+    restart: unless-stopped
+    networks: #Definir as redes a serem criadas
+      - app-network
+    volumes: #jaja eu mexo
+      - ./backend:/var/www/html
+
+  names:
+    build: name
+    container_name: name
+    ports:
+      - "nº"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - app-network
+
+  config:
+    build: name
+    container_name: name
+    ports:
+      - "nº"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - app-network
+    
+
