@@ -1,4 +1,10 @@
-Guia
+Projeto biblioteca virtual
+
+<h1> Objetivo: </h1>
+
+Desenvolver uma aplicação web distribuída utilizando contêineres Docker, na qual o frontend se comunica com o backend por meio de uma web service RESTful. Esta atividade visa proporcionar aos alunos experiência prática com a orquestração de contêineres, criação de APIs RESTful e a comunicação entre microserviços.
+
+Orientações para uso:
 
     É necessário clonar o repositório com o comando git clone https://github.com/Thelozx/biblioteca-virtual
     

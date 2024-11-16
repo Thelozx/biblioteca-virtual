@@ -1,0 +1,26 @@
+[
+    {
+      "id": 123,
+      "userId": 123,
+      "titulo": "Harry Potter e a pedra de crack",
+      "autor": "J.K. Rowling",
+      "ano": 2001,
+      "genero": "Fantasia"
+    },
+    {
+      "id": 231,
+      "userId": 123,
+      "titulo": "1984",
+      "autor": "George Orwell",
+      "ano": 1949,
+      "genero": "Distopia"
+    },
+    {
+      "id": 312,
+      "userId": 312,
+      "titulo": "Dom Casmurro",
+      "autor": "Machado de Assis",
+      "ano": 1899,
+      "genero": "Romance"
+    }
+]
