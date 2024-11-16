@@ -1,47 +1,51 @@
-version: "3.8" #Tudo aqui é exemplo
+version: "3.8" #Falta testar
+#Bglh cheio de n me toque, um espaço da problema em tudo, um enter da problema em tudo
 
 services:
   frontend: 
-    image: node:8 #Apache (Adaptar)
-    container_name: node_app
-    ports:
-      - "3000:3000"
-    command: 
-      ["npm", "start"]  # Define o comando de inicialização
+    image: nginx:latest          #Mais facil
+    container_name: frontend
+    ports:                       #http://localhost:8080
+      - "3000:80"                
+    volumes:                     #front --> diretorio nginx
+      - ../frontend:/usr/share/nginx/html 
+    depends_on:
+      - backend                   # back ativo antes do front
     networks:
-      - app_net  # Conecta o container à rede personalizada
-    volumes: #jaja eu mexo, to aprendendo
-      - ./app:/usr/src/app
+      - app_net                   # rede app_net
 
+    
   backend:
-    image: node:8 #Node.js (Adaptar)
-    container_name: node_app
+    build:
+      context: ../backend          # Diretório dockerfile backend
+      dockerfile: Dockerfile       # construi a imagem
+    container_name: backend
     ports:
-      - "3000:3000"
-    command: 
-      ["npm", "start"]
+      - "3001:3001"                #localhost:3001
+    volumes:
+      - ../backend:/usr/src/app    # Mapeia os arquivos do backend
+    depends_on:
+      - db                         # bd ativo antes do backend
     networks:
       - app_net
-    volumes:
-      - ./app:/usr/src/app
 
-  db: #obrigatoriamente mysql
-    image: mysql:8.0
-    container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: myappdb
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+
+  db:
+    image: mysql:latest
+    container_name: db
     ports:
-      - "3306:3306"
+      - "3306:3306"                # porta padrão do MySQL, só n mexe, dá muito problema
+    environment:
+      MYSQL_ROOT_PASSWORD: sua-senha
+      MYSQL_DATABASE: biblioteca   # faz o banco "biblioteca"
     volumes:
-      - mysql_data:/var/lib/mysql
-
+      - db_data:/var/lib/mysql     # mantem os dados do banco
+    networks:
+      - app_net
 
 volumes:
-  mysql_data:
+  db_data:                         # volume para manter os dados do banco
 
 networks:
-  app_net:
+  app_net:                         # rede para conectar os serviços
     driver: bridge
