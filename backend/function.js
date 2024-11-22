@@ -1,24 +1,23 @@
-//
-const fs = require("fs"); //File system socilitado 
-const path = require("path");
+const db = require("../banco/db.js");
 
-// Caminho dos arquivos JSON
-const livrosPath = path.join(__dirname, "livros.json");
-const usuariosPath = path.join(__dirname, "usuarios.json");
-
-// Função para ler arquivos JSON
-function readJSON(filePath) { //Caminho do arquivo
-    return JSON.parse(fs.readFileSync(filePath, "utf8")); //ler arquivos de forma sincronizada
+// Busca todos os livros
+async function getAllBooks() {
+    const [rows] = await db.query("SELECT * FROM livro");
+    return rows;
 }
 
-// Função para escrever arquivos JSON
-function writeJSON(filePath, data) {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+// Insere um novo livro
+async function addBook(titulo, autor, descricao, cpfUsuario) {
+    const query = `
+        INSERT INTO livro (titulo, autor, descricao, cpf_usuario)
+        VALUES (?, ?, ?, ?)
+    `;
+    const [result] = await db.query(query, [titulo, autor, descricao, cpfUsuario]);
+    return result;
 }
 
+// Exporta as funções para serem usadas no server.js
 module.exports = {
-    readJSON,
-    writeJSON,
-    livrosPath,
-    usuariosPath
+    getAllBooks,
+    addBook,
 };

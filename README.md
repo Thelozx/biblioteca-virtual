@@ -25,3 +25,9 @@ Orientações para uso:
 
     Recomendo instalar o nodemon, utilizando npm install nodemon
     Após isso rodar a aplicação utilizando nodemon src/index.js
+
+    para rodar a aplicação, vá para a pagina onde esta o arquivo e use o comando:
+    docker-compose up --build
+
+
+

@@ -1,51 +1,48 @@
-version: "3.8" #Falta testar
-#Bglh cheio de n me toque, um espaço da problema em tudo, um enter da problema em tudo
+version: "3.8"
 
 services:
-  frontend: 
-    image: nginx:latest          #Mais facil
-    container_name: frontend
-    ports:                       #http://localhost:8080
-      - "3000:80"                
-    volumes:                     #front --> diretorio nginx
-      - ../frontend:/usr/share/nginx/html 
-    depends_on:
-      - backend                   # back ativo antes do front
-    networks:
-      - app_net                   # rede app_net
-
-    
-  backend:
+  frontend:
     build:
-      context: ../backend          # Diretório dockerfile backend
-      dockerfile: Dockerfile       # construi a imagem
-    container_name: backend
+      context: ./frontend         # Diretório frontend (sem os dois pontos)
+      dockerfile: Dockerfile
+    container_name: frontend
     ports:
-      - "3001:3001"                #localhost:3001
-    volumes:
-      - ../backend:/usr/src/app    # Mapeia os arquivos do backend
+      - "3000:80"
     depends_on:
-      - db                         # bd ativo antes do backend
+      - backend
     networks:
       - app_net
 
+  backend:
+    build:
+      context: ./backend          # Diretório backend (sem os dois pontos)
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/usr/src/app
+    depends_on:
+      - db
+    networks:
+      - app_net
 
   db:
     image: mysql:latest
     container_name: db
     ports:
-      - "3306:3306"                # porta padrão do MySQL, só n mexe, dá muito problema
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: sua-senha
-      MYSQL_DATABASE: biblioteca   # faz o banco "biblioteca"
+      MYSQL_DATABASE: biblioteca
     volumes:
-      - db_data:/var/lib/mysql     # mantem os dados do banco
+      - db_data:/var/lib/mysql
     networks:
       - app_net
 
 volumes:
-  db_data:                         # volume para manter os dados do banco
+  db_data:
 
 networks:
-  app_net:                         # rede para conectar os serviços
+  app_net:
     driver: bridge

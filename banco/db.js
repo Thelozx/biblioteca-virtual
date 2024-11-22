@@ -1,22 +1,11 @@
-const express = require('express');
-const db = require('./db'); // Importa o arquivo db.js
-const app = express();
+const mysql = require("mysql2"); // Cria a conexão com o banco de dados
 
-app.use(express.urlencoded({ extended: true }));
-
-app.post('/adicionar-dados', (req, res) => {
-  const nome = req.body.nome;
-
-  db.inserirUsuario(nome, (err) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Erro ao salvar os dados.');
-    } else {
-      res.send('Usuário salvo com sucesso!');
-    }
-  });
+const pool = mysql.createPool({
+    host: "db",
+    user: "root",
+    password: "",
+    database: "biblioteca-virtual",
 });
 
-app.listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000');
-});
+// Exporta a pool para ser usada nos outros arquivos
+module.exports = pool.promise();
