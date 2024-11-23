@@ -1,9 +1,9 @@
 version: "3.8"
-
+#Rever, possivel erro
 services:
   frontend:
     build:
-      context: ./frontend         # Diretório frontend (sem os dois pontos)
+      context: ./frontend         # Diretório frontend 
       dockerfile: Dockerfile
     container_name: frontend
     ports:
@@ -15,11 +15,11 @@ services:
 
   backend:
     build:
-      context: ./backend          # Diretório backend (sem os dois pontos)
+      context: ./backend          # Diretório backend
       dockerfile: Dockerfile
     container_name: backend
     ports:
-      - "3001:3001"
+      - "3000:3000"
     volumes:
       - ./backend:/usr/src/app
     depends_on:
