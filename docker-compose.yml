@@ -1,5 +1,5 @@
-version: "3.8"
 #PELO AMOR DE DEUS, ESTEJA NA PASTA CORRETA
+
 services:
   frontend:
     build:
@@ -14,33 +14,35 @@ services:
       - app_net
 
   backend:
-    build:
-      context: ./backend
-    container_name: biblioteca_backend
-    command: npm start
-    volumes:
-      - ./backend:/app
+    build: ./backend
+    container_name: backend_container
     ports:
-      - "3000:3000"
+      - "3001:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: 09229009
+      DB_NAME: biblioteca_virtual
+      DB_PORT: 3306   
+    networks:
+      - app_net
     depends_on:
       - db
 
   db:
     image: mysql:latest
-    container_name: localhost
+    container_name: mysql_container
     ports:
-      - "3306:3306"
+      - "3306:3306"  # Porta do MySQL
     environment:
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_DATABASE: biblioteca_virtual
+      MYSQL_ROOT_PASSWORD: 09229009  # Senha do root
+      MYSQL_DATABASE: biblioteca_virtual # Nome do banco
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - app_net
-
-volumes:
-  db_data:
-
+    
 networks:
   app_net:
     driver: bridge
+
+volumes:
+  db_data:

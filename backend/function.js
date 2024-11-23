@@ -1,4 +1,4 @@
-const db = require("../banco/db.js");
+const db = require("./db.js");
 
 // Busca todos os livros
 async function getAllBooks() {

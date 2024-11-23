@@ -1,15 +1,19 @@
-# Backend Dockerfile - ./backend/Dockerfile
+FROM node:16
 
-FROM node:14
+# Define o diretório de trabalho
+WORKDIR /app
 
-WORKDIR /usr/src/app
-
+# Copia os arquivos necessários
 COPY package*.json ./
 
 RUN npm install
 
+# Copia o restante do código
 COPY . .
 
-EXPOSE 3001
+# Expõe a porta 3000
+EXPOSE 3000
 
-CMD ["npm", "start"]
+# Comando para iniciar o backend
+CMD ["node", "server.js"]
+
