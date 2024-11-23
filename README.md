@@ -39,7 +39,29 @@ Orientações para uso:
             - docker ps
         Por fim, acesse o navegador:
             http://localhost:3000/
-            
+
+    Configuração do banco de dados:
+    Ps: Ao fim teste com o cmd node backend/db.js
+        O nome do banco de dados:
+            - registrado como biblioteca_virtual (altere com o nome do seu banco)
+        Para a conexão:
+            usamos o localhost, usuario padrão (root), que n possui senha
+        O banco de dados foi configurado com:
+
+            Usuario:
+                - Id (PK)
+                - Nome
+                - Email
+                - Senha
+
+            Livros:
+                - Id (PK)
+                - Id_Usuario (FK)
+                - Titulo
+                - Autor
+                - Descrição
+
+    
 
 
 
