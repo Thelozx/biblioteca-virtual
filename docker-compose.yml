@@ -23,11 +23,13 @@ services:
       DB_USER: root
       DB_PASSWORD: 09229009
       DB_NAME: biblioteca_virtual
-      DB_PORT: 3306   
+      DB_PORT: 3306
     networks:
       - app_net
     depends_on:
       - db
+    volumes:
+      - ./backend:/usr/src/app  # Mapeia o código local no contêiner
 
   db:
     image: mysql:latest
