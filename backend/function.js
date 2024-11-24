@@ -1,9 +1,11 @@
+// Funções auxiliares para interagir com o banco, e operações relacionadas com a tabela livro \\
+
 const db = require("./db.js");
 
 // Busca todos os livros
 async function getAllBooks() {
     const [rows] = await db.query("SELECT * FROM livro");
-    return rows;
+    return rows; // Retorna todos os livros
 }
 
 // Insere um novo livro
@@ -13,11 +15,34 @@ async function addBook(titulo, autor, descricao, cpfUsuario) {
         VALUES (?, ?, ?, ?)
     `;
     const [result] = await db.query(query, [titulo, autor, descricao, cpfUsuario]);
-    return result;
+    return result; // Retorna informações sobre (como o id inserido)
 }
 
-// Exporta as funções para serem usadas no server.js
+// Atualiza um livro
+async function updateBook(id, titulo, autor, descricao, cpfUsuario) {
+    const query = `
+        UPDATE livro
+        SET titulo = ?, autor = ?, descricao = ?
+        WHERE id = ? AND cpf_usuario = ?
+    `;
+    const [result] = await db.query(query, [titulo, autor, descricao, id, cpfUsuario]);
+    return result; // Retorna informações sobre
+}
+
+// Remove um livro
+async function deleteBook(id, cpfUsuario) {
+    const query = `
+        DELETE FROM livro
+        WHERE id = ? AND cpf_usuario = ?
+    `;
+    const [result] = await db.query(query, [id, cpfUsuario]);
+    return result; // Retorna informações sobre
+}
+
+// Exporta tudo para o server.js
 module.exports = {
     getAllBooks,
     addBook,
+    updateBook,
+    deleteBook,
 };

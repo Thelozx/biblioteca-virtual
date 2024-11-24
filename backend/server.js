@@ -1,96 +1,96 @@
-require('dotenv').config();
-const express = require('express');
-const mysql = require('mysql');
-const bodyParser = require('body-parser');
-const app = express();
+// Configurações iniciais e midewares \\
+
+require('dotenv').config(); // Carrega variaveis no arquivo .env
+const express = require('express'); // Framework para construir APIs
+const bodyParser = require('body-parser'); // Mideware para tratar dados .JSON no corpo da requisição
+const { getAllBooks, addBook, updateBook, deleteBook } = require('./function.js'); // Importa funções auxiliares
+const app = express(); // Inicia a aplicação Express
 const port = process.env.PORT || 3000;
 
-// Configuração do banco de dados
-const connection = mysql.createConnection({
-    host: 'mysql_container', // Nome do serviço no docker-compose
-    user: 'root',            // Usuário do MySQL
-    password: '',       // Senha definida no MySQL
-    database: 'biblioteca_virtual' // Nome do banco
-});
+// Mideware para habilitar o uso de JSON no corpo da requisição
+app.use(bodyParser.json());
 
-// Teste
-connection.connect((err) => {
-    if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-    } else {
-        console.log('Conexão ao banco de dados bem-sucedida!');
+////////////////////////////////// Endpoints da API \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+// Endpoint para listar todos os livros de todos os usuarios
+app.get('/livros', async (req, res) => {
+    try {
+        const livros = await getAllBooks(); // Busca todos os livros no banco
+        res.json(livros); // Retorna os livros em formato .JSON
+    } catch (err) {
+        console.error('Erro ao buscar livros:', err);
+        res.status(500).send('Erro ao buscar livros');
     }
 });
 
-// Middleware
-app.use(bodyParser.json());
+// Endpoint para adicionar um novo livro
+app.post('/livros', async (req, res) => {
+    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai dados do corpo
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Validação de campos obrigatorios
+    if (!titulo || !autor || !cpf_usuario) {
+        return res.status(400).send('Título, autor e CPF do usuário são obrigatórios!');
+    }
 
-//Adiciona
-app.post('/livros', (req, res) => {
-    const { titulo, autor, id_usuario } = req.body;
-    const query = 'INSERT INTO livros (titulo, autor, id_usuario) VALUES (?, ?, ?)';
-    connection.query(query, [titulo, autor, id_usuario], (err, results) => {
-        if (err) {
-            console.error('Erro ao adicionar livro:', err);
-            res.status(500).send('Erro ao adicionar livro');
-        } else {
-            res.status(201).send('Livro adicionado com sucesso!');
-        }
-    });
+    try {
+        const result = await addBook(titulo, autor, descricao, cpf_usuario); // Adiciona o livro
+        res.status(201).json({
+            message: 'Livro adicionado com sucesso!',
+            id: result.insertId, // ID do livro inserido
+        });
+    } catch (err) {
+        console.error('Erro ao adicionar livro:', err);
+        res.status(500).send('Erro ao adicionar livro');
+    }
 });
 
-//Listar
-app.get('/livros', (req, res) => {
-    const { id_usuario } = req.query; // Espera o ID do usuário na query string
-    const query = 'SELECT * FROM livros WHERE id_usuario = ?';
-    connection.query(query, [id_usuario], (err, results) => {
-        if (err) {
-            console.error('Erro ao buscar livros:', err);
-            res.status(500).send('Erro ao buscar livros');
-        } else {
-            res.json(results);
-        }
-    });
-});
+// Endpoint para atualizar informações de um livro
+app.put('/livros/:id', async (req, res) => {
+    const { id } = req.params; // Obtem o id do livro dos parametros da URL
+    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai novos dados do corpo da requisição
 
-//Altera
-app.put('/livros/:id', (req, res) => {
-    const { id } = req.params;
-    const { titulo, autor, id_usuario } = req.body;
+    // Validação de campos obrigatorios
+    if (!titulo || !autor || !cpf_usuario) {
+        return res.status(400).send('Título, autor e CPF do usuário são obrigatórios!');
+    }
 
-    const query = 'UPDATE livros SET titulo = ?, autor = ? WHERE id = ? AND id_usuario = ?';
-    connection.query(query, [titulo, autor, id, id_usuario], (err, results) => {
-        if (err) {
-            console.error('Erro ao alterar livro:', err);
-            res.status(500).send('Erro ao alterar livro');
-        } else if (results.affectedRows === 0) {
+    try {
+        const result = await updateBook(id, titulo, autor, descricao, cpf_usuario); // Atualiza o livro
+        if (result.affectedRows === 0) {
             res.status(404).send('Livro não encontrado ou não pertence ao usuário');
         } else {
-            res.status(200).send('Livro alterado com sucesso!');
+            res.status(200).send('Livro atualizado com sucesso!');
         }
-    });
+    } catch (err) {
+        console.error('Erro ao atualizar livro:', err);
+        res.status(500).send('Erro ao atualizar livro');
+    }
 });
 
-//Deleta
-app.delete('/livros/:id', (req, res) => {
-    const { id } = req.params;
-    const { id_usuario } = req.body;
+// Endpoint para deletar um livro
+app.delete('/livros/:id', async (req, res) => {
+    const { id } = req.params; // Obtem o id do livro dos paramatros da URL
+    const { cpf_usuario } = req.body; // Obtém o CPF do usuário
 
-    const query = 'DELETE FROM livros WHERE id = ? AND id_usuario = ?';
-    connection.query(query, [id, id_usuario], (err, results) => {
-        if (err) {
-            console.error('Erro ao deletar livro:', err);
-            res.status(500).send('Erro ao deletar livro');
-        } else if (results.affectedRows === 0) {
+    // Verifica se o CPF do usuário foi enviado
+    if (!cpf_usuario) {
+        return res.status(400).send('CPF do usuário é obrigatório!');
+    }
+
+    try {
+        const result = await deleteBook(id, cpf_usuario); // Deleta o livro
+        if (result.affectedRows === 0) {
             res.status(404).send('Livro não encontrado ou não pertence ao usuário');
         } else {
             res.status(200).send('Livro deletado com sucesso!');
         }
-    });
+    } catch (err) {
+        console.error('Erro ao deletar livro:', err); // mpstra erros ao deletar
+        res.status(500).send('Erro ao deletar livro');
+    }
 });
 
+// Inicia o servidor na porta especificada
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
+    console.log(`Servidor rodando na porta ${port}`); // Mensagem indicando que o servidor está ativo
 });
