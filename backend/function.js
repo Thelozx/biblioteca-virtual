@@ -1,5 +1,6 @@
 // Funções auxiliares para interagir com o banco, e operações relacionadas com a tabela livro \\
-
+const cors = require('cors'); // Cross-Origin Resource Sharing) 
+app.use(cors());
 const db = require("./db.js");
 
 // Busca todos os livros
@@ -39,7 +40,7 @@ async function deleteBook(id, cpfUsuario) {
     return result; // Retorna informações sobre
 }
 
-// Exporta tudo para o server.js
+// Exporta tudo para server.js
 module.exports = {
     getAllBooks,
     addBook,

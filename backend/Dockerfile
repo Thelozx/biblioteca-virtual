@@ -1,16 +1,16 @@
 # Usar a imagem oficial do Node.js
-FROM node:16
+FROM node:18
 
 # Definir o diretório de trabalho no contêiner
 WORKDIR /usr/src/app
 
-# Copiar apenas os arquivos de dependências para o contêiner
+# Copiar os arquivos de dependências
 COPY package*.json ./
 
-# Instalar as dependências
+# Instalar as dependências do projeto
 RUN npm install
 
-# Copiar o restante do código para o contêiner
+# Copiar o restante do código da aplicação para o contêiner
 COPY . .
 
 # Expor a porta que o backend utiliza
@@ -18,4 +18,3 @@ EXPOSE 3000
 
 # Comando para iniciar o servidor
 CMD ["npm", "start"]
-

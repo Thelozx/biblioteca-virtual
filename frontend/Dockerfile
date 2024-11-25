@@ -1,10 +1,22 @@
-# Frontend Dockerfile
+# Etapa de construção
+FROM node:18 AS build
+WORKDIR /app
 
-FROM nginx:latest
+# Instalar dependências
+COPY package*.json ./
+RUN npm install
 
-# Copia os arquivos do frontend para o Nginx
-COPY . /usr/share/nginx/html
+# Copiar os arquivos do projeto e construir o frontend
+COPY . .
+RUN npm run build
 
+# Etapa de produção: usar nginx para servir arquivos estáticos
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Porta padrão do Nginx
+# Expor a porta padrão do nginx
 EXPOSE 80
+
+# Comando padrão para iniciar o nginx
+CMD ["nginx", "-g", "daemon off;"]
+

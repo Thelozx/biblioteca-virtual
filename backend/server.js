@@ -1,42 +1,56 @@
-// Configurações iniciais e midewares \\
+//Eu NÃO AGUENTO MAIS, nem deus nem o diabo existem mais, inferno q da problema\\
 
-require('dotenv').config(); // Carrega variaveis no arquivo .env
-const express = require('express'); // Framework para construir APIs
-const bodyParser = require('body-parser'); // Mideware para tratar dados .JSON no corpo da requisição
-const { getAllBooks, addBook, updateBook, deleteBook } = require('./function.js'); // Importa funções auxiliares
-const app = express(); // Inicia a aplicação Express
-const port = process.env.PORT || 3000;
+require('dotenv').config();
+const express = require('express');
+const bodyParser = require('body-parser'); // Middleware para tratar dados .JSON
+const path = require('path'); // Biblioteca para manipulação de caminhos
+const cors = require('cors'); // Middleware para habilitar CORS
+const { getAllBooks, addBook, updateBook, deleteBook } = require('./function.js');
 
-// Mideware para habilitar o uso de JSON no corpo da requisição
+const app = express(); // Inicia Express
+const port = process.env.PORT || 3001;
+
+// Middleware para habilitar o uso de JSON
 app.use(bodyParser.json());
+
+// Habilitar CORS
+app.use(cors());
+
+// Middleware para servir os arquivos do frontend
+app.use(express.static(path.join(__dirname, 'frontend'))); // Ajustado para garantir o caminho correto
+
+// Rota para carregar a página principal do frontend
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/landing-single.html'));
+});
 
 ////////////////////////////////// Endpoints da API \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-// Endpoint para listar todos os livros de todos os usuarios
+// Endpoint para listar
 app.get('/livros', async (req, res) => {
     try {
-        const livros = await getAllBooks(); // Busca todos os livros no banco
-        res.json(livros); // Retorna os livros em formato .JSON
+        const livros = await getAllBooks();
+        res.json(livros); // Retorna os livros em formato .json
     } catch (err) {
         console.error('Erro ao buscar livros:', err);
         res.status(500).send('Erro ao buscar livros');
     }
 });
 
-// Endpoint para adicionar um novo livro
+// Endpoint para adicionar
 app.post('/livros', async (req, res) => {
-    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai dados do corpo
+    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai dados
 
-    // Validação de campos obrigatorios
+    // Validação de campos
     if (!titulo || !autor || !cpf_usuario) {
         return res.status(400).send('Título, autor e CPF do usuário são obrigatórios!');
     }
 
     try {
-        const result = await addBook(titulo, autor, descricao, cpf_usuario); // Adiciona o livro
+        const result = await addBook(titulo, autor, descricao, cpf_usuario); // Adiciona
         res.status(201).json({
             message: 'Livro adicionado com sucesso!',
-            id: result.insertId, // ID do livro inserido
+            id: result.insertId, // Id do livro inserido
         });
     } catch (err) {
         console.error('Erro ao adicionar livro:', err);
@@ -44,12 +58,12 @@ app.post('/livros', async (req, res) => {
     }
 });
 
-// Endpoint para atualizar informações de um livro
+// Endpoint para atualizar
 app.put('/livros/:id', async (req, res) => {
-    const { id } = req.params; // Obtem o id do livro dos parametros da URL
-    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai novos dados do corpo da requisição
+    const { id } = req.params; // Obtém o ID do livro dos parâmetros da URL
+    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai novos dados
 
-    // Validação de campos obrigatorios
+    // Validação obrigatória
     if (!titulo || !autor || !cpf_usuario) {
         return res.status(400).send('Título, autor e CPF do usuário são obrigatórios!');
     }
@@ -67,12 +81,12 @@ app.put('/livros/:id', async (req, res) => {
     }
 });
 
-// Endpoint para deletar um livro
+// Endpoint para deletar
 app.delete('/livros/:id', async (req, res) => {
-    const { id } = req.params; // Obtem o id do livro dos paramatros da URL
-    const { cpf_usuario } = req.body; // Obtém o CPF do usuário
+    const { id } = req.params; //ID do livro
+    const { cpf_usuario } = req.body; //CPF do usuário
 
-    // Verifica se o CPF do usuário foi enviado
+    // Verifica
     if (!cpf_usuario) {
         return res.status(400).send('CPF do usuário é obrigatório!');
     }
@@ -85,12 +99,12 @@ app.delete('/livros/:id', async (req, res) => {
             res.status(200).send('Livro deletado com sucesso!');
         }
     } catch (err) {
-        console.error('Erro ao deletar livro:', err); // mpstra erros ao deletar
+        console.error('Erro ao deletar livro:', err); // Mostra erros ao deletar
         res.status(500).send('Erro ao deletar livro');
     }
 });
 
 // Inicia o servidor na porta especificada
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`); // Mensagem indicando que o servidor está ativo
+    console.log(`Servidor rodando na porta ${port}`); // Precaução
 });

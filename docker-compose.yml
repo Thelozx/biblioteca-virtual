@@ -8,10 +8,10 @@ services:
     container_name: frontend
     ports:
       - "3000:80"  # Expondo a porta 80 no contêiner para a 3000 localmente
-    depends_on:
-      - backend
+    
     networks:
       - app_net
+
 
   backend:
     build:
@@ -21,32 +21,34 @@ services:
     ports:
       - "3001:3000"  # Expondo a porta 3000 do backend para a 3001 localmente
     environment:
-      DB_HOST: db  # Nome do serviço do banco de dados, que será acessado pelo backend
+      DB_HOST: db  # Nome do serviço do banco de dados
       DB_USER: root
       DB_PASSWORD: 09229009
       DB_NAME: biblioteca_virtual
       DB_PORT: 3306
-    networks:
-      - app_net
     depends_on:
       - db
-    volumes:
-      - ./backend:/usr/src/app  # Mapeia o código local para dentro do contêiner
+      
+    networks:
+      - app_net
+
 
   db:
-    image: mysql:latest  # Usando a imagem oficial do MySQL
+    image: mysql:latest
     container_name: mysql_container
     ports:
-      - "3306:3306"  # Expondo a porta 3306 padrão do banco de dados
+      - "3306:3306"  # Expondo a porta padrão do MySQL
     environment:
-      MYSQL_ROOT_PASSWORD: 09229009  # Senha do root
-      MYSQL_DATABASE: biblioteca_virtual  # Nome do banco de dados
+      MYSQL_ROOT_PASSWORD: 09229009  # Segurança básica com senha para root
+      MYSQL_DATABASE: biblioteca_virtual
     volumes:
-      - db_data:/var/lib/mysql  # Persistência dos dados do banco de dados
+      - db_data:/var/lib/mysql  # Persistência dos dados do banco
+    networks:
+      - app_net
 
 networks:
   app_net:
-    driver: bridge  # Rede bridge para comunicação entre os contêineres
+    driver: bridge  # Rede para comunicação entre os contêineres
 
 volumes:
-  db_data:  # Volume persistente para os dados do MySQL
+  db_data:  # Volume para dados persistentes do MySQL
