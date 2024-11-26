@@ -1,14 +1,12 @@
 //Eu NÃO AGUENTO MAIS, nem deus nem o diabo existem mais, inferno q da problema\\
-
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser'); // Middleware para tratar dados .JSON
-const path = require('path'); // Biblioteca para manipulação de caminhos
-const cors = require('cors'); // Middleware para habilitar CORS
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const { getAllBooks, addBook, updateBook, deleteBook } = require('./function.js');
 
-const app = express(); // Inicia Express
-const port = process.env.PORT || 3001;
+const app = express();
+const port = process.env.PORT || 4000;
 
 // Middleware para habilitar o uso de JSON
 app.use(bodyParser.json());
@@ -16,94 +14,84 @@ app.use(bodyParser.json());
 // Habilitar CORS
 app.use(cors());
 
-/* Vai ser só API agr
-app.use(express.static(path.join(__dirname, 'frontend')));
+// Endpoints da API
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/landing-single.html'));
-});*/
-
-////////////////////////////////// Endpoints da API \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-// Endpoint para listar
+// Endpoint para listar livros
 app.get('/livros', async (req, res) => {
     try {
         const livros = await getAllBooks();
-        res.json(livros); // Retorna os livros em formato .json
+        res.json(livros);
     } catch (err) {
-        console.error('Erro ao buscar livros:', err);
+        console.error(`Erro ao buscar livros: ${err.message}`);
         res.status(500).send('Erro ao buscar livros');
     }
 });
 
-// Endpoint para adicionar
+// Endpoint para adicionar um livro
 app.post('/livros', async (req, res) => {
-    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai dados
+    const { titulo, autor, descricao, cpf_usuario } = req.body;
 
-    // Validação de campos
     if (!titulo || !autor || !cpf_usuario) {
         return res.status(400).send('Título, autor e CPF do usuário são obrigatórios!');
     }
 
     try {
-        const result = await addBook(titulo, autor, descricao, cpf_usuario); // Adiciona
+        const result = await addBook(titulo, autor, descricao, cpf_usuario);
         res.status(201).json({
             message: 'Livro adicionado com sucesso!',
-            id: result.insertId, // Id do livro inserido
+            id: result.insertId,
         });
     } catch (err) {
-        console.error('Erro ao adicionar livro:', err);
+        console.error(`Erro ao adicionar livro: ${err.message}`);
         res.status(500).send('Erro ao adicionar livro');
     }
 });
 
-// Endpoint para atualizar
+// Endpoint para atualizar um livro
 app.put('/livros/:id', async (req, res) => {
-    const { id } = req.params; // Obtém o ID do livro dos parâmetros da URL
-    const { titulo, autor, descricao, cpf_usuario } = req.body; // Extrai novos dados
+    const { id } = req.params;
+    const { titulo, autor, descricao, cpf_usuario } = req.body;
 
-    // Validação obrigatória
     if (!titulo || !autor || !cpf_usuario) {
         return res.status(400).send('Título, autor e CPF do usuário são obrigatórios!');
     }
 
     try {
-        const result = await updateBook(id, titulo, autor, descricao, cpf_usuario); // Atualiza o livro
+        const result = await updateBook(id, titulo, autor, descricao, cpf_usuario);
         if (result.affectedRows === 0) {
             res.status(404).send('Livro não encontrado ou não pertence ao usuário');
         } else {
             res.status(200).send('Livro atualizado com sucesso!');
         }
     } catch (err) {
-        console.error('Erro ao atualizar livro:', err);
+        console.error(`Erro ao atualizar livro: ${err.message}`);
         res.status(500).send('Erro ao atualizar livro');
     }
 });
 
-// Endpoint para deletar
+// Endpoint para deletar um livro
 app.delete('/livros/:id', async (req, res) => {
-    const { id } = req.params; //ID do livro
-    const { cpf_usuario } = req.body; //CPF do usuário
+    const { id } = req.params;
+    const { cpf_usuario } = req.body;
 
-    // Verifica
     if (!cpf_usuario) {
         return res.status(400).send('CPF do usuário é obrigatório!');
     }
 
     try {
-        const result = await deleteBook(id, cpf_usuario); // Deleta o livro
+        const result = await deleteBook(id, cpf_usuario);
         if (result.affectedRows === 0) {
             res.status(404).send('Livro não encontrado ou não pertence ao usuário');
         } else {
             res.status(200).send('Livro deletado com sucesso!');
         }
     } catch (err) {
-        console.error('Erro ao deletar livro:', err); // Mostra erros ao deletar
+        console.error(`Erro ao deletar livro: ${err.message}`);
         res.status(500).send('Erro ao deletar livro');
     }
 });
 
 // Inicia o servidor na porta especificada
 app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`); // Precaução
+    console.log(`Servidor rodando na porta ${port}`);
 });

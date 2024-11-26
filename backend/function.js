@@ -1,6 +1,4 @@
 // Funções auxiliares para interagir com o banco, e operações relacionadas com a tabela livro \\
-const cors = require('cors'); // Cross-Origin Resource Sharing) 
-app.use(cors());
 const db = require("./db.js");
 
 // Busca todos os livros
@@ -16,7 +14,7 @@ async function addBook(titulo, autor, descricao, cpfUsuario) {
         VALUES (?, ?, ?, ?)
     `;
     const [result] = await db.query(query, [titulo, autor, descricao, cpfUsuario]);
-    return result; // Retorna informações sobre (como o id inserido)
+    return result; // Retorna informações sobre o novo livro
 }
 
 // Atualiza um livro
@@ -27,7 +25,7 @@ async function updateBook(id, titulo, autor, descricao, cpfUsuario) {
         WHERE id = ? AND cpf_usuario = ?
     `;
     const [result] = await db.query(query, [titulo, autor, descricao, id, cpfUsuario]);
-    return result; // Retorna informações sobre
+    return result; // Retorna as informações da atualização
 }
 
 // Remove um livro
@@ -37,10 +35,10 @@ async function deleteBook(id, cpfUsuario) {
         WHERE id = ? AND cpf_usuario = ?
     `;
     const [result] = await db.query(query, [id, cpfUsuario]);
-    return result; // Retorna informações sobre
+    return result; // Retorna o status da remoção
 }
 
-// Exporta tudo para server.js
+// Exporta as funções
 module.exports = {
     getAllBooks,
     addBook,
