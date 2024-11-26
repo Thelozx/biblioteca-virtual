@@ -16,13 +16,12 @@ app.use(bodyParser.json());
 // Habilitar CORS
 app.use(cors());
 
-// Middleware para servir os arquivos do frontend
-app.use(express.static(path.join(__dirname, 'frontend'))); // Ajustado para garantir o caminho correto
+/* Vai ser só API agr
+app.use(express.static(path.join(__dirname, 'frontend')));
 
-// Rota para carregar a página principal do frontend
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/landing-single.html'));
-});
+});*/
 
 ////////////////////////////////// Endpoints da API \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 

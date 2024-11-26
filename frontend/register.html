@@ -96,6 +96,38 @@
 </div>
 </section>
 
+<script>
+    document.querySelector('.signin-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        const nome = document.getElementById('user_name').value;
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('password').value;
+        const confirmarSenha = document.getElementById('confirm-password').value;
+
+        // Validação
+        if (senha !== confirmarSenha) {
+            document.getElementById('error-message').style.display = 'block';
+            return;
+        }
+
+        // conecção com o back
+        fetch('http://localhost:4000/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, email, senha }),
+        })
+        .then((response) => {
+            if (!response.ok) throw new Error('Erro ao registrar usuário');
+            return response.json();
+        })
+        .then((data) => {
+            alert(data.message || 'Usuário registrado com sucesso!');
+            window.location.href = 'login.html'; // Redireciona para a página de login
+        })
+        .catch((error) => console.error('Erro:', error));
+    });
+</script>
 
 </body>
 </html>

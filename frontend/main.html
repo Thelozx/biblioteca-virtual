@@ -79,5 +79,85 @@
             document.getElementById(sectionId).classList.remove('hidden');
         }
     </script>
+
+    <script>
+        const API_BASE_URL = "http://localhost:4000";
+    
+        // Função para carregar os livros
+        async function carregarLivros() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/livros`, { method: 'GET' });
+            if (!response.ok) throw new Error("Erro ao carregar livros");
+            const livros = await response.json();
+    
+            const livrosContainer = document.getElementById("meus-livros");
+            livrosContainer.innerHTML = "<h2>Meus Livros</h2>"; // Limpa e insere o título novamente
+    
+            livros.forEach(livro => {
+            const livroCard = `
+                <div class="book-card">
+                <img src="${livro.capa}" alt="Capa do Livro">
+                <div>
+                    <h4>${livro.nome}</h4>
+                    <p>Autor: ${livro.autor}</p>
+                    <p>Descrição: ${livro.descricao}</p>
+                </div>
+                </div>
+            `;
+            livrosContainer.innerHTML += livroCard;
+            });
+        } catch (error) {
+            alert("Erro ao carregar livros: " + error.message);
+        }
+        }
+    
+        // Função para subir um livro
+        async function subirLivro(event) {
+        event.preventDefault();
+    
+        const nome = document.getElementById("nomeLivro").value;
+        const autor = document.getElementById("autorLivro").value;
+        const descricao = document.getElementById("descricaoLivro").value;
+        const arquivo = document.getElementById("arquivoLivro").files[0];
+    
+        const formData = new FormData();
+        formData.append("nome", nome);
+        formData.append("autor", autor);
+        formData.append("descricao", descricao);
+        formData.append("arquivo", arquivo);
+    
+        try {
+            const response = await fetch(`${API_BASE_URL}/livros`, {
+            method: 'POST',
+            body: formData,
+            });
+    
+            if (!response.ok) throw new Error("Erro ao subir livro");
+            alert("Livro adicionado com sucesso!");
+            carregarLivros(); // Atualiza a lista de livros
+        } catch (error) {
+            alert("Erro ao subir livro: " + error.message);
+        }
+        }
+    
+        // Função de logout
+        function logout() {
+        alert("Você saiu com sucesso!");
+        window.location.href = "login.html"; // Redireciona para a página de login
+        }
+    
+        // Configurações iniciais
+        document.addEventListener("DOMContentLoaded", () => {
+        carregarLivros(); // Carrega os livros ao abrir a página
+    
+        // Adiciona evento ao formulário de upload
+        const subirLivroForm = document.querySelector("#subir-livro form");
+        subirLivroForm.addEventListener("submit", subirLivro);
+        });
+    
+        // Evento do botão de logout
+        document.querySelector("a[href='#logout']").addEventListener("click", logout);
+    </script>
+
 </body>
 </html>

@@ -19,9 +19,9 @@ services:
       dockerfile: Dockerfile
     container_name: backend_container
     ports:
-      - "3001:3000"  # Expondo a porta 3000 do backend para a 3001 localmente
+      - "4000:3000"  # Expondo a porta 3000 do backend para a 4000 localmente
     environment:
-      DB_HOST: db  # Nome do serviço do banco de dados
+      DB_HOST: db
       DB_USER: root
       DB_PASSWORD: 09229009
       DB_NAME: biblioteca_virtual
@@ -37,9 +37,9 @@ services:
     image: mysql:latest
     container_name: mysql_container
     ports:
-      - "3306:3306"  # Expondo a porta padrão do MySQL
+      - "3306:3306"  # porta padrão do MySQL, se mudar vc que resolve
     environment:
-      MYSQL_ROOT_PASSWORD: 09229009  # Segurança básica com senha para root
+      MYSQL_ROOT_PASSWORD: 09229009  #senha para root
       MYSQL_DATABASE: biblioteca_virtual
     volumes:
       - db_data:/var/lib/mysql  # Persistência dos dados do banco
