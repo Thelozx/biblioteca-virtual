@@ -40,12 +40,12 @@
                     <li class="nav-item mr-lg-1">
                         <a class="nav-link scroll" href="landing-single.html">Contato</a>
                     </li>
-                    <!--/search-right-->
+                    <!--/Busca -->
                     <li class="header-search mr-lg-2 mt-lg-0 mt-4 position-relative">
                         <div class="search-right">
                             <a href="#search" class="btn btn-style search-btn" title="search"><span
                                     class="fas fa-search mr-2" aria-hidden="true"></span> Buscar</a>
-                            <!-- search popup -->
+                            <!--/Telinha busca -->
                             <div id="search" class="pop-overlay">
                                 <div class="popup">
 
@@ -59,10 +59,10 @@
                                 </div>
                                 <a class="close" href="#close">×</a>
                             </div>
-                            <!-- /search popup -->
+                            <!--//Telinha busca -->
                         </div>
                     </li>
-                    <!--//search-right-->
+                    <!--//Busca -->
                 </ul>
             </div>
         </nav>
@@ -111,7 +111,7 @@
             return;
         }
 
-        // conecção com o back
+        // Conexão com o backend
         fetch('http://localhost:4000/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
